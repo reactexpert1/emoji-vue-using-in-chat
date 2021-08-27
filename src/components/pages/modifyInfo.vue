@@ -8,22 +8,22 @@
       <p>{{ this.form.username }}</p>
     </div>
     <form>
-      <p class="InputTitle">用户名：</p>
+      <p class="InputTitle">username:</p>
       <input type="text" v-model="form.username" class="basicInput">
-      <p class="InputTitle">原密码：</p>
+      <p class="InputTitle">old password:</p>
       <input type="password" class="basicInput" v-model="form.oldPassword">
-      <p class="InputTitle">新密码：</p>
+      <p class="InputTitle">new password:</p>
       <input type="password" class="basicInput" v-model="form.newPassword">
-      <p class="InputTitle">确认密码：</p>
+      <p class="InputTitle">Confirm Password:</p>
       <input
         type="password"
         class="basicInput makesure"
         v-model="form.newPasswordAgain"
         @blur="comparePassword"
       >
-      <p class="InputTitle">头像：</p>
+      <p class="InputTitle">Avatar:</p>
       <input type="file" class="fileInput" @change="changeAvatar" ref="avatar">
-      <button @click="submit" class="submit">提交修改</button>
+      <button @click="submit" class="submit">Submit changes</button>
     </form>
   </div>
 </template>
@@ -61,7 +61,7 @@ export default {
     },
     getObjectURL(file) {
       var url = null;
-      // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+      // The effect of the following functions is the same, but different js functions need to be executed for different browsers.
       if (window.createObjectURL != undefined) {
         // basic
         url = window.createObjectURL(file);
@@ -107,7 +107,7 @@ export default {
         });
     },
     comparePassword() {
-      // 提示新密码输入不一致
+      // Prompt that the new password input is inconsistent
       if (this.form.newPasswordAgain !== this.form.newPassword) {
         alert("myTest");
         return false;

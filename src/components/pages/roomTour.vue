@@ -4,7 +4,7 @@
       <i class="iconfont icon-right" @click="goBack"></i>
     </div>
     <div class="Title">
-      <h3>选择房间</h3>
+      <h3>Choose a room</h3>
     </div>
     <div class="roomList">
       <ul>
@@ -14,7 +14,7 @@
           @click="goToChatroom(room.roomNum)"
           :style="'background-image:url('+room.bgImg+');background-size: 100%;'"
         >{{ room.roomName }}</li>
-        <li v-if="rooms.length <= 10" class="addRoom" @click="addRoom">创建房间</li>
+        <li v-if="rooms.length <= 10" class="addRoom" @click="addRoom">Create a room</li>
       </ul>
     </div>
     <addRoom v-if="showAddRoom" @cancel="addCancel" :roomCount="rooms.length"/>
@@ -39,14 +39,14 @@ export default {
     this.username = sessionStorage.getItem("user");
     console.log(this.username)
     if(!this.username){
-      alert("未登陆，请先登录")
+      alert("Not logged in, please log in first")
       this.$router.push('/')
     }
     this.getRooms();
   },
   methods: {
     getRooms() {
-      //  获取房间信息
+      //  Get room information
       this.$axios
         .get("/getRooms")
         .then(res => {

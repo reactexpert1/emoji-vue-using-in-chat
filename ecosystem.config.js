@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'vue-chatroom',
+    name: 'chat-emoji-vue',
     script: 'server/app.js',
     env: {
       COMMON_VARIABLE: 'true'
@@ -11,10 +11,10 @@ module.exports = {
   }],
   deploy: {
     production: {
-      user: 'Lydia',
-      host: '132.232.124.245',
+      user: 'truedev',
+      host: '10.10.13.211',
       ref: 'origin/master',
-      repo: 'git@github.com:Yaer23/vue-chatroom.git',
+      repo: 'git@github.com:truedev718/chat-emoji-vue.git',
       path: '/www/vue-chatroom',
       'post-deploy': 'git pull && chmod +x ./run.sh && ./run.sh && pm2 reload ecosystem.config.js --env production'
     }

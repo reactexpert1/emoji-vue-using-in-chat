@@ -23,10 +23,10 @@
       <div v-for="(item,index) of msgs" :key="index" class="msgItem">
         <div class="sysTime">{{ item.time }}</div>
         <div v-if="item.msgType == 'online'" class="onlineMsg">
-          <div class="online">{{ item.username }} 上线</div>
+          <div class="online">{{ item.username }} online</div>
         </div>
         <div v-else-if="item.msgType == 'offline'" class="offlineMsg">
-          <div class="offline">{{ item.username }} 下线</div>
+          <div class="offline">{{ item.username }} Offline</div>
         </div>
         <div v-else class="clientMsgs">
           <div v-if="item.username == currentUser" class="self">
@@ -171,18 +171,18 @@ export default {
   },
   created() {
     this.roomNum = this.$route.params.roomNum;
-    // 保存用户socket
+    // Save usersocket
     if (!this.$store.state.socket) {
       this.$store.commit("addSocket", io(`http://localhost:8889/`));
     }
     this.socket = this.$store.state.socket;
-    // 加入房间
+    // Join room
     this.socket.emit("joinRoom", this.roomNum);
-    //  获取用户名
+    //  Get username
     this.currentUser = sessionStorage.getItem("user");
-    // 用户上线提示
+    // User online prompt
     this.socket.emit("online", this.currentUser);
-    // 接收用户上线信息
+    // Receive user online information
     this.socket.on("online", data => {
       this.msgs.push({
         msgType: "online",
@@ -190,7 +190,7 @@ export default {
         time: moment().format("HH:mm:ss")
       });
     });
-    // 接收消息
+    // Receive message
     this.socket.on("broadcastMsg", data => {
       this.msgs.push({
         msgType: "clientMsg",
@@ -200,7 +200,7 @@ export default {
         time: moment().format("HH:mm:ss")
       });
     });
-    // 用户下线提醒
+    // User offline reminder
     this.socket.on("offline", data => {
       this.msgs.push({
         msgType: "offline",
@@ -208,15 +208,15 @@ export default {
         time: moment().format("HH:mm:ss")
       });
     });
-    // 监听当前在线人数
+    // Monitor the current number of people online
     this.socket.on("clientNum", num => {
       this.clientNum = num;
     });
-    // 获取房间名
+    // Get room name
     this.getRoomName();
   },
   updated() {
-    // 保持聊天内容展示的更近
+    // Keep the chat content displayed closer
     this.$nextTick(function() {
       var oBody = document.querySelector(".body");
       oBody.scrollTop = oBody.scrollHeight;
@@ -237,20 +237,20 @@ export default {
         });
         this.msg = "";
       } else {
-        alert("消息为空！");
+        alert("The message is empty!");
       }
     },
     showAbout() {
       this.$store.commit("showAbout", true);
     },
-    // 添加表情
+    // Add emoticons
     addEmoji(emoji) {
       this.msg += emoji;
     },
     openMenu() {
       console.log("open");
     },
-    // 获取房间名
+    // Get room name
     getRoomName() {
       this.$axios
         .get(`/getRoomName?roomNum=${this.roomNum}`)

@@ -2,7 +2,7 @@
   "name": "chatroom",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Yaer23 <770631546@qq.com>",
+  "author": "truedev0718",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

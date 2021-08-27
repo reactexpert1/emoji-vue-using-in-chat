@@ -2,7 +2,7 @@
   <div class="login">
     <div class="header">
       <div class="right">
-        <i class="iconfont icon-info" title="关于" @click="showAbout"></i>
+        <i class="iconfont icon-info" title="about" @click="showAbout"></i>
         <About v-if="isShowAbout"/>
       </div>
     </div>
@@ -37,7 +37,7 @@
       <div class="wrap">
         <h4>
           Powered by
-          <a href="http://github.com/Yaer23">{{ author }}</a>
+          <a href="http://github.com/truedev718">{{ author }}</a>
         </h4>
       </div>
     </div>
@@ -86,7 +86,7 @@ export default {
         });
         // sessionStorage.setItem('username',this.username);
       } else {
-        alert("请输入您的姓名！");
+        alert("please enter your name!");
       }
     },
     register(){},

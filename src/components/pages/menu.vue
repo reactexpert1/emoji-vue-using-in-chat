@@ -8,9 +8,9 @@
       <p  @click="goToModify">{{ username }} </p>
     </div>
     <div class="panel_wrap">
-      <div class="panel" @click="goToModify">修改个人信息</div>
-      <div class="panel" @click="goToRoomTour">选择房间</div>
-      <div class="panel" @click="logout">注销</div>
+      <div class="panel" @click="goToModify">edit personal information</div>
+      <div class="panel" @click="goToRoomTour">Choose a room</div>
+      <div class="panel" @click="logout">Logout</div>
     </div>
   </div>
 </template>

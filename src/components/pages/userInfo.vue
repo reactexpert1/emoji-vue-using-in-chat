@@ -9,11 +9,11 @@
           <img :src="avatar" alt>
         </div>
         <p>{{ $route.params.user }}</p>
-        <p class="signature">“你現在過的每一天，都是餘生中最年輕的一天。”</p>
+        <p class="signature">“Every day you live now is the youngest day of the rest of your life.”</p>
       </div>
       <div class="infoBottom">
-        <button>添加好友</button>
-        <button @click="goToPrivateChat">私聊</button>
+        <button>add friend</button>
+        <button @click="goToPrivateChat">Private chat</button>
       </div>
     </div>
   </div>
@@ -29,7 +29,7 @@ export default {
   },
   created() {
     console.log(this.$route);
-    //  获取头像
+    //  Get avatar
     this.getAvatar();
   },
   methods: {

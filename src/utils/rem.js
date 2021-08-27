@@ -1,8 +1,8 @@
 (function (doc, win) {
   var docEl = doc.documentElement,
-    //  手机竖屏事件
+    //  Mobile phone vertical screen event
     resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
-    //  计算根元素字体大小
+    //  Calculate the font size of the root element
     recalc = function () {
 
       var clientWidth = docEl.clientWidth;

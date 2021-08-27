@@ -1,104 +1,104 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 const express = require("express")
-//  引入封装的db模块
+// Introduce the encapsulated db module
 const db = require('./models/db')
-//  引入formidable模块
+// Introduce the formidable module
 const formidable = require("formidable")
 const path = require("path")
 const PORT = 8889;
 
-//  创建express服务器
+// Create express server
 const app = require('express')();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 server.listen(PORT, function () {
   console.log("listening on: 8889")
 });
-// 加密加盐
+// Encryption and salt
 const bcrypt = require('bcrypt') 
 const SALT_WORK_FACTOR = 10
 
-//  获取路由中间件
+// Get routing middleware
 let router = express.Router()
 // let clientCount = 0;
 let count = {};
 
-//监听client的连接,回调函数传递本次连接的socket
+//Monitor the client's connection, the callback function passes the socket of this connection
 io.on('connection', function (socket) {
 	console.log(socket)
-  //  根据房间号加入相应的房间
+  // Add the corresponding room according to the room number
   socket.on('joinRoom', function (roomNum) {
     socket.roomNum = roomNum;
     if (!count[roomNum]) {
-      // 房间不存在，当前人数为1
+      // The room does not exist, the current number of people is 1
       count[roomNum] = 1
     } else {
-      // 房间存在，当前人数加1
+      // The room exists, the current number of people is increased by 1
       count[roomNum]++;
     }
     console.log(count)
     socket.join(roomNum);
   })
 
-  // 接收到某用户上线信息
+  // Received the online information of a user
   socket.on('online', function (user) {
-    // 广播当前房间在线人数
+    // Broadcast the current number of people online in the room
     io.to(socket.roomNum).emit("clientNum", count[socket.roomNum])
     socket.username = user
-    // 给所有在当前房间的client广播消息（不包括当前socket本身）
+    // Broadcast messages to all clients in the current room (not including the current socket itself)
     socket.broadcast.in(socket.roomNum).emit("online", user)
 
-    console.log('user : ' + socket.username + '上线!')
+    console.log('user : ' + socket.username + 'online!')
   })
 
-  // 接收用户发送的消息
+  // Receive messages sent by users
   socket.on('msg', function (data) {
     console.log("msg enter")
-    // 广播接收到的消息(包括发送给当前socket)
+    // Broadcast the received message (including sent to the current socket)
     io.to(socket.roomNum).emit("broadcastMsg", data)
   })
 
-  //  接收到私聊信息
+  // Receive private chat information
   // socket.on('privateMsg', function (data) {
   //   console.log(data)
   // })
 
-  //  接收用户断开连接的信息
+  // Receive user disconnect information
   socket.on('offline', function (user) {
     count[socket.roomNum]--;
-    // 广播当前房间在线人数
+    // Broadcast the current number of people online in the room
     io.to(socket.roomNum).emit("clientNum", count[socket.roomNum])
-    // 广播用户断开下线
+    // Broadcast user disconnected and offline
     socket.broadcast.in(socket.roomNum).emit("offline", user);
     socket.leave(socket.roomNum);
-    console.log("user : " + user + ' 下线了~')
+    console.log("user : " + user + ' going offline~')
   })                  
 
-  // 监听用户断开连接
+  // Monitor user disconnection
   socket.on('disconnect', function () {
-    // 当前socket离开房间
+    // The current socket leaves the room
     socket.leave(socket.roomNum);
-    // 当前房间人数减1
+    // The current number of people in the room minus 1
     count[socket.roomNum]--;
-    // 广播当前房间在线人数
+    // Broadcast the current number of people online in the room
     io.to(socket.roomNum).emit("clientNum", count[socket.roomNum])
-    // 广播用户断开下线
+    // Broadcast user disconnected and offline
     socket.broadcast.in(socket.roomNum).emit("offline", socket.username);
-    console.log("user : " + socket.username + ' 下线了~')
+    console.log("user : " + socket.username + ' going offline~')
   })
 })
 
-// 路由接口
+// routing interface
 router.post("/doRegister", (req, res, next) => {
-  //  解析文件，用包
+  // parse the file, use the package
   var form = new formidable.IncomingForm()
-  // 修改上传目录
+  // Modify upload directory
   form.uploadDir = path.join(__dirname, 'public', 'imgs');
-  //  设置编码格式
+  // Set the encoding format
   form.encoding = 'utf-8';
-  // 保持原始文件的扩展名
+  // Keep the original file extension
   form.keepExtensions = true;
-  // 解析
+  // parse
   form.parse(req, function (err, fields, files) {
     var username = fields.username;
     var password = fields.password;
@@ -109,7 +109,7 @@ router.post("/doRegister", (req, res, next) => {
     } else {
       avatar = "http://images.lydiagogo.cn/chat_avatar.jpg"
     }
-    //  判断用户名是否存在
+    // Determine whether the user name exists
     console.log(username, password, avatar)
     db.find("user", {
       username
@@ -118,28 +118,28 @@ router.post("/doRegister", (req, res, next) => {
       if (result.length) {
         res.json({
           code: 300,
-          msg: "用户名已存在!"
+          msg: "Username already exists!"
         })
       } else {
-        // 加密加盐
+        // Encryption and salt
         bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
           if (err) return next(err)
           bcrypt.hash(password, salt, (err, hash) => {
             if (err) return next(err)
             password = hash
-            // 保存数据到数据库
+            // Save the data to the database
             db.insert("user", {
               username,
               password,
               avatar
             }, function (err, result) {
               if (err) return next(err)
-              // 保存位置的cookie
+              // save location cookie
               // res.setHeader('set-cookie', 'location=' + location);
-              // 同步提交，浏览器等待页面显示
+              // Synchronous submission, the browser waits for the page to be displayed
               res.json({
                 code: 200,
-                msg: "注册成功！"
+                msg: "registration success!"
               })
             })
           })
@@ -149,45 +149,45 @@ router.post("/doRegister", (req, res, next) => {
     })
   });
 }).post("/doLogin", (req, res, next) => {
-  //  解析文件，用包
+  // parse the file, use the package
   var form = new formidable.IncomingForm();
-  //  设置编码格式
+  // Set the encoding format
   form.encoding = 'utf-8';
-  // 解析
+  // parse
   form.parse(req, function (err, fields, files) {
     if (err) next(err)
     var username = fields.username;
     var password = fields.password;
-    //  判断用户名和密码是否正确
+    // Determine whether the username and password are correct
     db.find("user", {
       username
     }, function (err, result) {
       if (err) {
         res.json({
           code: 500,
-          msg: "数据库错误"
+          msg: "Database error"
         })
       } else if (result.length == 0) {
         res.json({
           code: 400,
-          msg: "该用户不存在"
+          msg: "this user does not exist"
         })
       } else {
         bcrypt.compare(password, result[0].password, (err, isMatch) => {
           if (err) {
             res.json({
               code: 500,
-              msg: "数据库出错！"
+              msg: "database error!"
             })
           } else if (isMatch) {
             res.json({
               code: 200,
-              msg: "登陆成功！"
+              msg: "Successful landing!"
             })
           } else {
             res.json({
               code: 400,
-              msg: "密码错误！"
+              msg: "wrong password!"
             })
           }
         })
@@ -212,7 +212,7 @@ router.post("/doRegister", (req, res, next) => {
       console.log("0")
       res.json({
         code: 300,
-        msg: "未找到!"
+        msg: "Not found!"
       })
     }
   })
@@ -222,7 +222,7 @@ router.post("/doRegister", (req, res, next) => {
     // if (result.length >= 10) {
     //   res.json({
     //     code: 300,
-    //     msg: "房间数目过多，超过十个，添加房间失败"
+    //     msg: "Too many rooms, more than ten, failed to add room"
     //   })
     // } else {
     res.json({
@@ -232,15 +232,15 @@ router.post("/doRegister", (req, res, next) => {
     // }
   })
 }).post("/addRoom", (req, res, next) => {
-  //  解析文件，用包
+  // parse the file, use the package
   var form = new formidable.IncomingForm()
-  // 修改上传目录
+  // Modify upload directory
   form.uploadDir = path.join(__dirname, 'public', 'roomBgImg');
-  //  设置编码格式
+  // Set the encoding format
   form.encoding = 'utf-8';
-  // 保持原始文件的扩展名
+  // Keep the original file extension
   form.keepExtensions = true;
-  // 解析
+  // parse
   form.parse(req, function (err, fields, files) {
     var roomName = fields.roomName;
     var roomNum = fields.roomNum;
@@ -249,19 +249,19 @@ router.post("/doRegister", (req, res, next) => {
       console.log("{}")
       bgImg = "http://localhost:8889/roomBgImg/" + path.parse(files.bgImg.path).base;
     }
-    // 保存数据到数据库
+    // Save the data to the database
     db.insert("rooms", {
       roomName,
       roomNum,
       bgImg
     }, function (err, result) {
       if (err) return next(err)
-      // 保存位置的cookie
+      // save location cookie
       // res.setHeader('set-cookie', 'location=' + location);
-      // 同步提交，浏览器等待页面显示
+      // Synchronous submission, the browser waits for the page to be displayed
       res.json({
         code: 200,
-        msg: "添加成功！"
+        msg: "Added successfully!"
       })
     });
   })
@@ -279,15 +279,15 @@ router.post("/doRegister", (req, res, next) => {
     })
   })
 }).post("/modifyInfo", (req, res, next) => {
-  //  解析文件，用包
+  // parse the file, use the package
   var form = new formidable.IncomingForm()
-  // 修改上传目录
+  // Modify upload directory
   form.uploadDir = path.join(__dirname, 'public', 'imgs');
-  //  设置编码格式
+  // Set the encoding format
   form.encoding = 'utf-8';
-  // 保持原始文件的扩展名
+  // Keep the original file extension
   form.keepExtensions = true;
-  // 解析
+  // parse
   form.parse(req, function (err, fields, files) {
     var user = fields.user;
     var username = fields.username;
@@ -304,13 +304,13 @@ router.post("/doRegister", (req, res, next) => {
       bcrypt.compare(oldPassword, result[0].password, (err, isMatch) => {
         if (err) return next(err)
         if (isMatch) {
-          // 对新密码进行加密加盐
+          // Encrypt and salt the new password
           bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
             if (err) return next(err)
             bcrypt.hash(password, salt, (err, hash) => {
               if (err) return next(err)
               password = hash
-              // 更新数据到数据库
+              // Update data to the database
               db.update("user", {
                 username: user
               }, {
@@ -319,14 +319,14 @@ router.post("/doRegister", (req, res, next) => {
                 avatar
               }, function (err, result) {
                 if (err) return next(err)
-                // 保存位置的cookie
+                // save location cookie
                 // res.setHeader('set-cookie', 'location=' + location);
-                // 同步提交，浏览器等待页面显示
+                // Synchronous submission, the browser waits for the page to be displayed
                 console.log(result)
                 if(result.result.ok == 1){
                   res.json({
                     code: 200,
-                    msg: "修改成功！"
+                    msg: "Successfully modified!"
                   })
                 }
               });
@@ -336,7 +336,7 @@ router.post("/doRegister", (req, res, next) => {
         } else {
           res.json({
             code: 400,
-            msg: "密码错误！"
+            msg: "wrong password!"
           })
         }
       })
@@ -345,8 +345,8 @@ router.post("/doRegister", (req, res, next) => {
 })
 
 
-//  处理静态文件（图片）的路径
+// Process the path of static files (pictures)
 app.use(express.static(path.join(__dirname, '/public')));
 
-//  将路由中间件加入到app服务器中
+// Add the routing middleware to the app server
 app.use(router);

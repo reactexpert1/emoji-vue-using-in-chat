@@ -1,12 +1,12 @@
 <template>
   <div id="addRoom">
     <form>
-      <h4>房间名：</h4>
+      <h4>Room name:</h4>
       <input type="text" v-model="form.roomName">
-      <h4>背景图：</h4>
+      <h4>Background image:</h4>
       <input type="file" class="fileInput" ref="bgImg">
-      <button @click="cancel">取消</button>
-      <button @click="submit">提交</button>
+      <button @click="cancel">Cancel</button>
+      <button @click="submit">submit</button>
     </form>
   </div>
 </template>
@@ -80,18 +80,17 @@ input[type="text"] {
 
 /* button */
 button {
-  /* 按钮美化 */
   margin-top: 1.25rem;
-  width: 5rem; /* 宽度 */
-  height: 2.5rem; /* 高度 */
-  border-width: 0px; /* 边框宽度 */
-  border-radius: 3px; /* 边框半径 */
-  background: #888; /* 背景颜色 */
-  cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
-  outline: none; /* 不显示轮廓线 */
-  font-family: Microsoft YaHei; /* 设置字体 */
-  color: white; /* 字体颜色 */
-  font-size: 17px; /* 字体大小 */
+  width: 5rem; 
+  height: 2.5rem; 
+  border-width: 0px; 
+  border-radius: 3px; 
+  background: #888; 
+  cursor: pointer; 
+  outline: none; 
+  font-family: Microsoft YaHei; 
+  color: white; 
+  font-size: 17px; 
 }
 
 /* file */

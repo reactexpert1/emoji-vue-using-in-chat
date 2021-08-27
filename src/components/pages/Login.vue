@@ -2,7 +2,7 @@
   <div class="login">
     <div class="header">
       <div class="right">
-        <i class="iconfont icon-info" title="关于" @click="showAbout"></i>
+        <i class="iconfont icon-info" title="about" @click="showAbout"></i>
         <transition name="slide-fade">
           <About v-if="isShowAbout"/>
         </transition>
@@ -41,7 +41,7 @@
       <div class="wrap">
         <h4>
           Powered by
-          <a href="http://github.com/Yaer23">{{ author }}</a>
+          <a href="http://github.com/truedev718">{{ author }}</a>
         </h4>
       </div>
     </div>
@@ -59,7 +59,7 @@ export default {
         username: "",
         password: ""
       },
-      author: "Lydiagogo",
+      author: "truedev718",
       avatar: "http://images.lydiagogo.cn/chat_avatar.jpg",
     };
   },
@@ -69,7 +69,7 @@ export default {
     }
   },
   methods: {
-    //  非空判断
+    //  Non-empty judgment
     checkLogin() {
       if (this.form.username.trim() && this.form.password.trim()) {
         return true;
@@ -79,7 +79,7 @@ export default {
     },
     login() {
       if (this.checkLogin()) {
-        //  登陆操作：检查用户名和密码是否一致（为防止恶意试探用户名，只提示“用户名或密码有误”）
+        //  Login operation: check whether the user name and password are consistent (to prevent malicious detection of the user name, only prompt "the user name or password is wrong")
         this.$axios
           .post("/doLogin", {
             username: this.form.username,
@@ -98,14 +98,14 @@ export default {
             console.log(err);
           });
       } else {
-        alert("您输入的用户名或密码长度有问题！");
+        alert("There is a problem with the length of the username or password you entered!");
       }
     },
     showAbout() {
       this.$store.commit("showAbout", true);
     },
     checkAvatar() {
-      //  通过this.form.username在数据库中查询是否有相关的用户，并将其头像反应到页面上
+      //  Query whether there are related users in the database through this.form.username, and reflect their avatars on the page
       this.$axios
         .get(`/getAvatar?username=${this.form.username}`)
         .then(res => {
@@ -165,7 +165,7 @@ export default {
   padding: 2rem;
 }
 
-/* 输入框样式 */
+/* Input box style */
 .Input {
   width: 12rem;
   display: inline-block;

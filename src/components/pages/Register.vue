@@ -2,7 +2,7 @@
   <div class="register">
     <div class="header">
       <div class="right">
-        <i class="iconfont icon-info" title="关于" @click="showAbout"></i>
+        <i class="iconfont icon-info" title="about" @click="showAbout"></i>
         <transition name="slide-fade">
           <About v-if="isShowAbout"/>
         </transition>
@@ -40,7 +40,7 @@
       <div class="wrap">
         <h4>
           Powered by
-          <a href="http://github.com/Yaer23">{{ author }}</a>
+          <a href="http://github.com/truedev718">{{ author }}</a>
         </h4>
       </div>
     </div>
@@ -59,7 +59,7 @@ export default {
         password: "",
         avatar: "http://images.lydiagogo.cn/chat_avatar.jpg"
       },
-      author: "Lydiagogo"
+      author: "trudev718"
     };
   },
   computed:{
@@ -100,7 +100,7 @@ export default {
     },
     getObjectURL(file) {
       var url = null;
-      // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+      // The effect of the following functions is the same, but different js functions need to be executed for different browsers.
       if (window.createObjectURL != undefined) {
         // basic
         url = window.createObjectURL(file);

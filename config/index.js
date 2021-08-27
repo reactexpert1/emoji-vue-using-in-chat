@@ -1,6 +1,5 @@
 'use strict'
 // Template version: 1.3.1
-// see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
 
@@ -10,12 +9,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      //  这里指的是将localhost:8889/api/xxx改写为请求localhost:8888/api/xxx
+      //  // This refers to localhost:8889/api/xxx Rewritten as a request localhost:8888/api/xxx
       '/api': {
-        target: 'http://localhost:8889', //源地址 
-        changeOrigin: true, //改变源 
+        target: 'http://localhost:8889', //source address 
+        changeOrigin: true, //Change source
         pathRewrite: {
-          '^/api': '/' //路径重写 （后端的路由重写，后端写接口可以将/api去掉）
+          '^/api': '/' //Path rewriting (back-end routing rewriting, the back-end write interface can be removed from /api)
         }
       }
     },

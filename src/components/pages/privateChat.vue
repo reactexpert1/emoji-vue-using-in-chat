@@ -23,11 +23,11 @@
       <div v-for="(item,index) of msgs" :key="index">
         <div v-if="item.msgType == 'online'" class="onlineMsg">
           <div class="sysTime">{{ item.time }}</div>
-          <div class="online">{{ item.username }} 上线</div>
+          <div class="online">{{ item.username }} online</div>
         </div>
         <div v-else-if="item.msgType == 'offline'" class="offlineMsg">
           <div class="sysTime">{{ item.time }}</div>
-          <div class="offline">{{ item.username }} 下线</div>
+          <div class="offline">{{ item.username }} offline</div>
         </div>
         <div v-else class="clientMsgs">
           <div class="sysTime">{{ item.time }}</div>
@@ -101,7 +101,7 @@ export default {
     console.log(this.$route.params.user);
     this.currentUser = sessionStorage.getItem("user");
 
-    // 接收消息
+    // Receive message
     this.socket.on("privateMsg", data => {
       console.log(data);
     });
@@ -115,7 +115,7 @@ export default {
     //   });
     //   console.log(data);
     // });
-    // 用户下线提醒
+    // User offline reminder
     this.socket.on("offline", data => {
       if (data == this.$route.params.user) {
         this.msgs.push({
@@ -126,7 +126,7 @@ export default {
       }
     });
   },
-  //  设置窗口滚动
+  //  Set window scrolling
   updated: function() {
     this.$nextTick(function() {
       var oBody = document.querySelector(".body");
@@ -148,7 +148,7 @@ export default {
         });
         this.msg = "";
       } else {
-        alert("消息为空！");
+        alert("The message is empty!");
       }
     },
     showAbout() {

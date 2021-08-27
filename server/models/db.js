@@ -7,9 +7,9 @@ const {
 const client = new MongoClient(dbUrl);
 let db = {};
 
-//  连接数据库函数
+//  Connect to the database function
 function _connect(cb) {
-  //  配置链接信息
+  //  Configure link information
   MongoClient.connect(dbUrl, function (err, client) {
     if (err) throw err;
     cb(client);
@@ -17,7 +17,7 @@ function _connect(cb) {
   })
 }
 
-//  初始化连接数据库 -- 连接数据库并创建索引，提高查询效率
+//  Initialize the connection to the database - connect to the database and create an index to improve query efficiency
 function _init(cname) {
   _connect(function (client) {
     const col = client.db(database).collection(cname);
@@ -25,62 +25,62 @@ function _init(cname) {
       "username": "text"
     }, function (err) {
       if (err) throw err;
-      console.log('username索引创建成功');
+      console.log('usernameIndex created successfully');
       client.close();
     });
   });
 }
 
-// 数据初始化
+// Data initialization
 _init("user");
 
-//  增
+//  increase
 db.insert = function (colName, data, cb) {
   _connect(function (client) {
     const col = client.db(database).collection(colName);
     col.insertOne(data, function (err, result) {
-      //  抛出数据或错误，交给外部处理
+      //  Throw data or errors and hand them to external processing
       cb(err, result);
-      //  关闭连接
+      //  Close the connection
       client.close();
     })
   })
 }
 
-//  删
+//  delete
 db.delete = function (colName, match, cb) {
   _connect(function (client) {
     const col = client.db(database).collection(colName);
     col.deleteMany(match, function (err, result) {
-      //  抛出数据或错误，交给外部处理
+      //  Throw data or errors and hand them to external processing
       cb(err, result);
-      //  关闭连接
+      //  Close the connection
       client.close();
     })
   })
 }
 
-//  改
+//  update
 db.update = function(colName, match, updated, cb){
   _connect(function(client){
     const col = client.db(database).collection(colName);
     col.update(match,{$set:updated},function(err, result){
-      //  抛出数据或错误，交给外部处理
+      //  Throw data or errors and hand them to external processing
       cb(err, result);
-      //  关闭连接
+      //  Close the connection
       client.close();
     })
   })
 }
 
-//  查
+//  check
 db.find = function (colName, match, cb){
   _connect(function(client){
     const col = client.db(database).collection(colName);
       col.find(match).toArray(function (err, result) {
-        //  将错误或数据叫诶外部处理
+        // Call the error or data for external processing
         cb(err, result);
-        //  关闭连接
+        // close the connection
         client.close();
       })    
   })

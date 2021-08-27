@@ -10,7 +10,7 @@ Vue.use(Vuex);
 
 Vue.config.productionTip = false
 
-//  工具引入 -- 移动端适配
+//  Tool introduction - mobile adaptation
 import '@/utils/rem.js'
 
 //  vuex
@@ -46,14 +46,14 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 //  axios
 import axios from 'axios'
-axios.defaults.baseURL = 'api'; //所有axios请求都是以/api开头
+axios.defaults.baseURL = 'api'; //All axios requests start with /api
 Vue.prototype.$axios = axios;
 
 // router.beforeEach((to, from, next) => {
 //   if (to.path === '/') {
 //     next()
 //   } else {
-//     if (!sessionStorage.getItem('username')) { // 判断当前用户是否存在
+//     if (!sessionStorage.getItem('username')) { // Determine whether the current user exists
 //       alert('Login first!')
 //       next('/')
 //     } else {
