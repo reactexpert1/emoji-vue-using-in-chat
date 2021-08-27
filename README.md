@@ -5,7 +5,7 @@ vue2.0 and websocket
 
 ## Introduce
 
--A small real-time chat project based on vue2.0 and websocket, which supports the most basic chat functions such as user dialogue and online and offline reminders
+  -A small real-time chat project based on vue2.0 and websocket, which supports the most basic chat functions such as user dialogue and online and offline reminders
   -Simple display of front-end pages using vue2.0
   -Processing of chat bubbles (css draws a triangle of bubbles)
   -vue-router to switch page routing
@@ -26,7 +26,8 @@ vue2.0 and websocket
 
 ### Distinguish:
 
- -socket.emit(): broadcast to the client that established **this connection**
+ -socket.emit(): broadcast to the client that established 
+ **this connection**
  -socket.broadcast.emit(): broadcast to all clients except the client that established the connection (in the project, used for the user online and offline reminder part)
  -io.sockets.emit()/io.emit(): broadcast messages to all clients, including the current socket itself (the warrior part of the project used for messages)
 
