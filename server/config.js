@@ -1,6 +1,7 @@
 const path = require("path");
 module.exports = {
-  dbUrl: 'mongodb://chatroomUser:123456@127.0.0.1:27017/chatroom',
+  //dbUrl: 'mongodb://chatroomUser:123456@127.0.0.1:27017/chatroom',
+  dbUrl: 'mongodb://127.0.0.1:27017/chatroom',
   database: 'chatroom',
   colName: 'user',
   appPort: 9999,
